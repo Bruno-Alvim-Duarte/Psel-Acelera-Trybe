@@ -14,7 +14,7 @@ export default {
         type: Sequelize.STRING(100),
         allowNull: false,
       },
-      emai: {
+      email: {
         type: Sequelize.STRING(100),
         allowNull: false,
       },

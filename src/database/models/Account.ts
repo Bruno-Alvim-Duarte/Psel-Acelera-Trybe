@@ -1,17 +1,15 @@
-import { Model, DataTypes } from "sequelize";
+import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
 import sequelize from ".";
 
-class Account extends Model {
-  public id!: number;
-  public name!: string;
-  public email!: string;
-  public password!: string;
-  public status!: boolean;
-  public CPF?: string;
-  public CNPJ?: string;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+class Account extends Model<InferAttributes<Account>,
+InferCreationAttributes<Account>> {
+  declare id: CreationOptional<number>;
+  declare name: string;
+  declare email: string;
+  declare password: string;
+  declare status: boolean;
+  declare CPF?: string;
+  declare CNPJ?: string;
 }
 
 Account.init({
@@ -41,6 +39,10 @@ Account.init({
     type: DataTypes.STRING(14),
     allowNull: true,
   },
+  email: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
+  }
 }, {
   sequelize,
   tableName: "Accounts",
