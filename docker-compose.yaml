@@ -3,7 +3,7 @@ services:
   db:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_ROOT_PASSWORD: "123456"
       MYSQL_DATABASE: database_name
     ports:
       - "3306:3306"
@@ -19,6 +19,7 @@ services:
       - DB_USER=root
       - DB_PASS=123456
       - DB_HOST=db
-      - DB_PORT = 3306
+      - DB_PORT=3306
+      - DB_NAME=database_name
     depends_on:
       - db
