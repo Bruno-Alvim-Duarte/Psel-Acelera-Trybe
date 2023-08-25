@@ -14,6 +14,10 @@ export default {
         type: Sequelize.STRING(100),
         allowNull: false,
       },
+      emai: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
+      },
       password: {
         type: Sequelize.STRING(100),
         allowNull: false,

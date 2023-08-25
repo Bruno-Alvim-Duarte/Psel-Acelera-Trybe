@@ -4,6 +4,7 @@ import sequelize from ".";
 class Account extends Model {
   public id!: number;
   public name!: string;
+  public email!: string;
   public password!: string;
   public status!: boolean;
   public CPF?: string;
