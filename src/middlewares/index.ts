@@ -13,7 +13,7 @@ export default class Middlewares {
       return res.status(400).json({ message: 'CPF or CNPJ is required' });
     }
 
-    if (CPF.length !== 11 && CNPJ.length !== 14) {
+    if (CPF?.length !== 11 && CNPJ?.length !== 14) {
       return res.status(400).json({ message: 'CPF or CNPJ is invalid' });
     }
 

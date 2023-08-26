@@ -6,7 +6,7 @@ export default class AccountModel {
   private sequelizeAccount = SequelizeAccount;
 
   async create(account: Omit<IAccount, "id">) {
-    return this.sequelizeAccount.create({...account, status: false});
+    return this.sequelizeAccount.create({...account, status: true});
   }
   
   async findByCPF(CPF: string) {

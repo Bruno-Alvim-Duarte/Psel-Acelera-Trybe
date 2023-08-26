@@ -1,8 +1,11 @@
 import { ServiceResponse } from '../types/ServiceResponse';
 import AccountModel from '../models/account.model';
 import IAccount from '../types/IAccount';
+import Encrypter from '../utils/Encrypter';
 
 export default class AccountService {
+  private Encrypter = new Encrypter();
+
   constructor(
     private accountModel = new AccountModel()
   ) {}
@@ -19,7 +22,9 @@ export default class AccountService {
     if (existsAccount) {
       return { status: 'INVALID_DATA', data: {message: 'Account already exists'}  };
     }
-      const createdAccount = await this.accountModel.create(account);
-      return { status: 'SUCCESSFUL', data: createdAccount };
+
+    const encryptedPassword = await this.Encrypter.encrypt(account.password);
+    const createdAccount = await this.accountModel.create({...account, password: encryptedPassword});
+    return { status: 'SUCCESSFUL', data: createdAccount };
   }
 }
