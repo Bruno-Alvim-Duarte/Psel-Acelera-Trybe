@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 
 export default class Middlewares {
 
-  static validateAccount(req: Request, res: Response, next: NextFunction) {
+  static validateCreateAccount(req: Request, res: Response, next: NextFunction) {
     const { name, email, password, CPF, CNPJ } = req.body;
 
     if (!name || !email || !password) {

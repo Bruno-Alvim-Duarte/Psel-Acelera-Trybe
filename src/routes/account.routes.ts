@@ -6,6 +6,6 @@ const accountController = new AccountController();
 
 const accountRouter = Router();
 
-accountRouter.post('/', Middlewares.validateAccount, (req: Request, res: Response) => accountController.create(req, res));
+accountRouter.post('/', Middlewares.validateCreateAccount, (req: Request, res: Response) => accountController.create(req, res));
 
 export default accountRouter
