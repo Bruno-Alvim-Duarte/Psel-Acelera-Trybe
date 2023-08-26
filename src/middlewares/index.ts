@@ -9,6 +9,12 @@ export default class Middlewares {
       return res.status(400).json({ message: 'Name, email and password is required' });
     }
 
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i;
+
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: 'Email is invalid' });
+    }
+
     if (!CPF && !CNPJ) {
       return res.status(400).json({ message: 'CPF or CNPJ is required' });
     }
@@ -40,7 +46,7 @@ export default class Middlewares {
     if (!CPF && !CNPJ) {
       return res.status(400).json({ message: 'CPF or CNPJ is required' });
     }
-    
+
     if (CPF?.length !== 11 && CNPJ?.length !== 14) {
       return res.status(400).json({ message: 'CPF or CNPJ is invalid' });
     }
