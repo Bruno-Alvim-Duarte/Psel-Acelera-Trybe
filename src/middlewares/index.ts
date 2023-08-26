@@ -33,4 +33,22 @@ export default class Middlewares {
 
     next();
   }
+
+  static validateLogin(req: Request, res: Response, next: NextFunction) {
+    const { CPF, CNPJ, password } = req.body;
+
+    if (!CPF && !CNPJ) {
+      return res.status(400).json({ message: 'CPF or CNPJ is required' });
+    }
+    
+    if (CPF?.length !== 11 && CNPJ?.length !== 14) {
+      return res.status(400).json({ message: 'CPF or CNPJ is invalid' });
+    }
+
+    if (!password) {
+      return res.status(400).json({ message: 'Password is required' });
+    }
+
+    next();
+  }
 }
