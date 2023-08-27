@@ -6,6 +6,8 @@ import ILoginRequest from '../types/LoginRequest';
 import TokenGenerator from '../utils/TokenGenerator';
 import IUpdateRequest from '../types/UpdateRequest';
 
+const NOT_FOUND_MESSAGE = 'Account does not exists';
+
 export default class AccountService {
   private Encrypter = new Encrypter();
   private TokenGenerator = new TokenGenerator();
@@ -24,13 +26,13 @@ export default class AccountService {
     }
 
     if (existsAccount) {
-      return { status: 'INVALID_DATA', data: { message: 'Account already exists' } };
+      return { status: 'INVALID_DATA', data: { message: NOT_FOUND_MESSAGE } };
     }
 
     const encryptedPassword = await this.Encrypter.encrypt(account.password);
     const createdAccount = await this.accountModel
       .create({ ...account, password: encryptedPassword });
-    return { status: 'SUCCESSFUL', data: createdAccount };
+    return { status: 'CREATED', data: createdAccount };
   }
 
   async login(loginRequest: ILoginRequest): Promise<ServiceResponse<string>> {
@@ -43,7 +45,7 @@ export default class AccountService {
     }
 
     if (!existsAccount) {
-      return { status: 'INVALID_DATA', data: { message: 'Account does not exists' } };
+      return { status: 'INVALID_DATA', data: { message: NOT_FOUND_MESSAGE } };
     }
 
     const isPasswordCorrect = await this.Encrypter.compare(password, existsAccount.password);
@@ -63,9 +65,17 @@ export default class AccountService {
     const didUpdate = await this.accountModel
       .update(+id, { name, email, password: encryptedPassword, status });
     if (didUpdate[0] === 0) {
-      return { status: 'INVALID_DATA', data: { message: 'Account does not exists' } };
+      return { status: 'INVALID_DATA', data: { message: NOT_FOUND_MESSAGE } };
     }
     const updatedAccount = await this.accountModel.findById(+id) as IAccount;
     return { status: 'SUCCESSFUL', data: updatedAccount };
+  }
+
+  async delete(id: number): Promise<ServiceResponse<null>> {
+    const deletedAccount = await this.accountModel.delete(id);
+    if (deletedAccount[0] === 0) {
+      return { status: 'INVALID_DATA', data: { message: NOT_FOUND_MESSAGE } };
+    }
+    return { status: 'DELETED', data: null };
   }
 }

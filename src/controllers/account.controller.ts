@@ -21,4 +21,9 @@ export default class AccountController {
     const serviceResponse = await this.accountService.update(req.body);
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
+
+  async delete(req: Request, res: Response): Promise<Response> {
+    const serviceResponse = await this.accountService.delete(req.body.id);
+    return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+  }
 }

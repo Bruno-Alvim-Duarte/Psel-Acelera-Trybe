@@ -24,5 +24,10 @@ accountRouter.put(
   Middlewares.validateUpdateAccount,
   (req: Request, res: Response) => accountController.update(req, res),
 );
+accountRouter.delete(
+  '/',
+  Middlewares.JWTAuth,
+  (req: Request, res: Response) => accountController.delete(req, res),
+);
 
 export default accountRouter;

@@ -1,5 +1,5 @@
 export type ServiceReponseSuccess<T> = {
-  status: 'SUCCESSFUL' | 'CREATED',
+  status: 'SUCCESSFUL' | 'CREATED' | 'DELETED',
   data: T
 };
 

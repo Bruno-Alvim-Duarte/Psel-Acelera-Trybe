@@ -23,4 +23,9 @@ export default class AccountModel {
   async update(id: number, objToUpdate: Partial<IAccount>) {
     return this.sequelizeAccount.update(objToUpdate, { where: { id } });
   }
+
+  async delete(id: number) {
+    const account = await this.findById(id);
+    return this.sequelizeAccount.update({ ...account, status: false }, { where: { id } });
+  }
 }
