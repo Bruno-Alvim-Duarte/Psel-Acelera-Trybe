@@ -15,4 +15,12 @@ export default class AccountModel {
   async findByCNPJ(CNPJ: string) {
     return this.sequelizeAccount.findOne({ where: { CNPJ } });
   }
+
+  async findById(id: number) {
+    return this.sequelizeAccount.findOne({ where: { id } });
+  }
+
+  async update(id: number, objToUpdate: Partial<IAccount>) {
+    return this.sequelizeAccount.update(objToUpdate, { where: { id } });
+  }
 }

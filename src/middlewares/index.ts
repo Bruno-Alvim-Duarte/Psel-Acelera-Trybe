@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
+import TokenGenerator from '../utils/TokenGenerator';
+import mapStatusHTTP from '../utils/mapStatusHTTP';
 
 export default class Middlewares {
+  private static TokenGenerator = new TokenGenerator();
+
   static validateCreateAccount(req: Request, res: Response, next: NextFunction) {
     const { name, email, password, CPF, CNPJ } = req.body;
 
@@ -29,11 +34,13 @@ export default class Middlewares {
     const { name, email, password, CPF, CNPJ } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Name, email and password is required' });
+      return res.status(mapStatusHTTP('INVALID_DATA'))
+        .json({ message: 'Name, email and password is required' });
     }
 
     if (CPF || CNPJ) {
-      return res.status(400).json({ message: 'CPF or CNPJ cannot be updated' });
+      return res.status(mapStatusHTTP('INVALID_DATA'))
+        .json({ message: 'CPF or CNPJ cannot be updated' });
     }
 
     next();
@@ -43,17 +50,36 @@ export default class Middlewares {
     const { CPF, CNPJ, password } = req.body;
 
     if (!CPF && !CNPJ) {
-      return res.status(400).json({ message: 'CPF or CNPJ is required' });
+      return res.status(mapStatusHTTP('INVALID_DATA')).json({ message: 'CPF or CNPJ is required' });
     }
 
     if (CPF?.length !== 11 && CNPJ?.length !== 14) {
-      return res.status(400).json({ message: 'CPF or CNPJ is invalid' });
+      return res.status(mapStatusHTTP('INVALID_DATA')).json({ message: 'CPF or CNPJ is invalid' });
     }
 
     if (!password) {
-      return res.status(400).json({ message: 'Password is required' });
+      return res.status(mapStatusHTTP('INVALID_DATA')).json({ message: 'Password is required' });
     }
 
     next();
+  }
+
+  static JWTAuth(req: Request, res: Response, next: NextFunction) {
+    const { authorization } = req.headers;
+
+    if (!authorization) {
+      return res.status(mapStatusHTTP('UNAUTHORIZED')).json({ message: 'Token not found' });
+    }
+
+    try {
+      const payload = Middlewares.TokenGenerator.verifyToken(authorization) as JwtPayload;
+
+      req.body.id = payload.id;
+
+      next();
+    } catch (err) {
+      return res.status(mapStatusHTTP('UNAUTHORIZED'))
+        .json({ message: 'Token must be a valid token' });
+    }
   }
 }

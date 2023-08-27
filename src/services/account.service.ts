@@ -4,6 +4,7 @@ import IAccount from '../types/IAccount';
 import Encrypter from '../utils/Encrypter';
 import ILoginRequest from '../types/LoginRequest';
 import TokenGenerator from '../utils/TokenGenerator';
+import IUpdateRequest from '../types/UpdateRequest';
 
 export default class AccountService {
   private Encrypter = new Encrypter();
@@ -53,5 +54,18 @@ export default class AccountService {
     const token = this.TokenGenerator.generateToken({ id: existsAccount.id });
 
     return { status: 'SUCCESSFUL', data: token };
+  }
+
+  async update(updateRequest: IUpdateRequest): Promise<ServiceResponse<IAccount>> {
+    const { id, name, email, password, status } = updateRequest;
+
+    const encryptedPassword = await this.Encrypter.encrypt(password);
+    const didUpdate = await this.accountModel
+      .update(+id, { name, email, password: encryptedPassword, status });
+    if (didUpdate[0] === 0) {
+      return { status: 'INVALID_DATA', data: { message: 'Account does not exists' } };
+    }
+    const updatedAccount = await this.accountModel.findById(+id) as IAccount;
+    return { status: 'SUCCESSFUL', data: updatedAccount };
   }
 }

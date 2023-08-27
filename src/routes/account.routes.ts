@@ -18,4 +18,11 @@ accountRouter.post(
 
   (req: Request, res: Response) => accountController.login(req, res),
 );
+accountRouter.put(
+  '/',
+  Middlewares.JWTAuth,
+  Middlewares.validateUpdateAccount,
+  (req: Request, res: Response) => accountController.update(req, res),
+);
+
 export default accountRouter;
