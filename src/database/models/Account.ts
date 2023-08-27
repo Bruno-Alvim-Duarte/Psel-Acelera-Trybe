@@ -1,5 +1,6 @@
-import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
-import sequelize from ".";
+import { Model, DataTypes,
+  InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
+import sequelize from '.';
 
 class Account extends Model<InferAttributes<Account>,
 InferCreationAttributes<Account>> {
@@ -42,11 +43,11 @@ Account.init({
   email: {
     type: DataTypes.STRING(100),
     allowNull: false,
-  }
+  },
 }, {
   sequelize,
-  tableName: "Accounts",
+  tableName: 'Accounts',
   timestamps: false,
-})
+});
 
 export default Account;

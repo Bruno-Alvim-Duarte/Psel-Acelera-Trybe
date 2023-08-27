@@ -10,7 +10,7 @@ export default class AccountService {
   private TokenGenerator = new TokenGenerator();
 
   constructor(
-    private accountModel = new AccountModel()
+    private accountModel = new AccountModel(),
   ) {}
 
   async create(account: IAccount): Promise<ServiceResponse<IAccount>> {
@@ -23,11 +23,12 @@ export default class AccountService {
     }
 
     if (existsAccount) {
-      return { status: 'INVALID_DATA', data: {message: 'Account already exists'}  };
+      return { status: 'INVALID_DATA', data: { message: 'Account already exists' } };
     }
 
     const encryptedPassword = await this.Encrypter.encrypt(account.password);
-    const createdAccount = await this.accountModel.create({...account, password: encryptedPassword});
+    const createdAccount = await this.accountModel
+      .create({ ...account, password: encryptedPassword });
     return { status: 'SUCCESSFUL', data: createdAccount };
   }
 
@@ -41,12 +42,12 @@ export default class AccountService {
     }
 
     if (!existsAccount) {
-      return { status: 'INVALID_DATA', data: {message: 'Account does not exists'}  };
+      return { status: 'INVALID_DATA', data: { message: 'Account does not exists' } };
     }
 
     const isPasswordCorrect = await this.Encrypter.compare(password, existsAccount.password);
     if (!isPasswordCorrect) {
-      return { status: 'INVALID_DATA', data: {message: 'Password does not match'}  };
+      return { status: 'INVALID_DATA', data: { message: 'Password does not match' } };
     }
 
     const token = this.TokenGenerator.generateToken({ id: existsAccount.id });
