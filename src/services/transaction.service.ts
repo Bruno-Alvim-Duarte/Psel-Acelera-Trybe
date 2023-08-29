@@ -27,4 +27,21 @@ export default class TransactionService {
       data: transacationCreated,
     };
   }
+
+  async getAll(accountId: number): Promise<ServiceResponse<ITransaction[]>> {
+    const account = await this.accountModel.findById(accountId);
+    if (!account || account.status === false) {
+      return {
+        status: 'NOT_FOUND',
+        data: {
+          message: 'Conta não encontrada',
+        },
+      };
+    }
+    const transactions = await this.transactionModel.getAll(accountId);
+    return {
+      status: 'SUCCESSFUL',
+      data: transactions,
+    };
+  }
 }

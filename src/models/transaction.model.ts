@@ -7,4 +7,8 @@ export default class TransactionModel {
   async create(transaction: ITransaction) {
     return this.sequelizeTransaction.create(transaction);
   }
+
+  async getAll(accountId: number) {
+    return this.sequelizeTransaction.findAll({ where: { accountId } });
+  }
 }

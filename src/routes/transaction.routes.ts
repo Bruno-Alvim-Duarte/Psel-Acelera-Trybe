@@ -13,4 +13,10 @@ transactionRouter.post(
   (req: Request, res: Response) => transactionController.create(req, res),
 );
 
+transactionRouter.get(
+  '/',
+  Middlewares.JWTAuth,
+  (req: Request, res: Response) => transactionController.getAll(req, res),
+);
+
 export default transactionRouter;

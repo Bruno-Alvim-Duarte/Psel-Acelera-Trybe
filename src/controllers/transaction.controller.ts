@@ -13,8 +13,18 @@ export default class TransactionController {
       const serviceResponse = await this
         .transactionService.create({ accountId: id, value, cashback, date });
       return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-    } catch (err) {
-      return res.status(500).json(err);
+    } catch (err: any) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
+  async getAll(req: Request, res: Response) {
+    try {
+      const { id } = req.body;
+      const serviceResponse = await this.transactionService.getAll(+id);
+      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+    } catch (err: any) {
+      return res.status(500).json({ message: err.message });
     }
   }
 }
