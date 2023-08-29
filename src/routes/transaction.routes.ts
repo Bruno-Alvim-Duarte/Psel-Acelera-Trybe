@@ -9,7 +9,7 @@ const transactionRouter = Router();
 transactionRouter.post(
   '/',
   Middlewares.JWTAuth,
-
+  Middlewares.validateCreateTransaction,
   (req: Request, res: Response) => transactionController.create(req, res),
 );
 

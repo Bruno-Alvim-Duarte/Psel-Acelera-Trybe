@@ -82,4 +82,25 @@ export default class Middlewares {
         .json({ message: 'Token must be a valid token' });
     }
   }
+
+  static validateCreateTransaction(req: Request, res: Response, next: NextFunction) {
+    const { value, cashback, date } = req.body;
+    if (!value || !cashback || !date) {
+      return res.status(mapStatusHTTP('INVALID_DATA'))
+        .json({ message: 'Value, cashback and date is required' });
+    }
+    if (typeof value !== 'number' || typeof cashback !== 'number') {
+      return res.status(mapStatusHTTP('INVALID_DATA'))
+        .json({ message: 'Value and cashback must be a number' });
+    }
+    if (value <= 0 || cashback <= 0) {
+      return res.status(mapStatusHTTP('INVALID_DATA'))
+        .json({ message: 'Value and cashback must be greater than 0' });
+    }
+    if (typeof date !== 'string' || !date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return res.status(mapStatusHTTP('INVALID_DATA'))
+        .json({ message: 'Date must be a string and must be in the format YYYY-MM-DD' });
+    }
+    next();
+  }
 }
