@@ -3,11 +3,11 @@ import { CreationOptional, DataTypes,
 import sequelize from '.';
 import Account from './Account';
 
-class Transaction extends Model<InferCreationAttributes<Transaction>,
-InferAttributes<Transaction>> {
+class Transaction extends Model<InferAttributes<Transaction>,
+InferCreationAttributes<Transaction>> {
   declare id: CreationOptional<number>;
   declare accountId: number;
-  declare date: Date;
+  declare date: string;
   declare value: number;
   declare cashback: number;
 }
@@ -24,7 +24,7 @@ Transaction.init({
     allowNull: false,
   },
   date: {
-    type: DataTypes.DATE,
+    type: DataTypes.STRING(10),
     allowNull: false,
   },
   value: {
@@ -45,3 +45,5 @@ Transaction.init({
 Account.hasMany(Transaction, { foreignKey: 'accountId', as: 'transactions' });
 
 Transaction.belongsTo(Account, { foreignKey: 'accountId', as: 'account' });
+
+export default Transaction;
